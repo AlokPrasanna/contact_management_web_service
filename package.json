@@ -1,0 +1,22 @@
+{
+  "name": "contact_management_backend_web_service",
+  "version": "1.0.0",
+  "description": "This is contact management web service backend part developed using Node, Mongo DB, JS and Express Js.",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "keywords": [
+    "contact",
+    "management",
+    "web",
+    "service",
+    "backend"
+  ],
+  "author": "Alok Prasanna Jayathilaka",
+  "license": "ISC",
+  "dependencies": {
+    "express": "^4.18.3",
+    "mongodb": "^6.4.0"
+  }
+}
