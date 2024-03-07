@@ -2,7 +2,7 @@
 const mongoose = require("mongoose");
 
 // -------------------- Custom Livraries and modules --------------------
-const Config = require("../../../Configuration");
+const Config = require("../../../configuration");
 
 // -------------------- Function to initialize the mongo db connection --------------------
 const ConnectDatabase = async() => {

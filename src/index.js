@@ -1,8 +1,14 @@
 // -------------------- Third-party components and modules --------------------
 const express = require("express");
+require("dotenv/config");
+
+// -------------------- Custom libraries and modules --------------------
+const Configs = require("./configuration");
+const { ConnectDatabase} = require("./api/v1/libraries") 
 
 // -------------------- Third-party components and modules --------------------
 const app = express();
+const PORT = Configs.PORT || 3308;
 
 // -------------------- Common middleware --------------------
 // -------------------- Base route --------------------
@@ -17,8 +23,9 @@ app.use((req , res) => {
 });
 
 // -------------------- Initialize Connection --------------------
-app.listen(3000 , () => {
-    console.log(`Server is running at 3000 port`);
-})
+app.listen(PORT , () => {
+    console.log(`Server is running at ${PORT} port`);
+    ConnectDatabase().then(() => console.log("Connected to Database!")).catch((err) => onslotchange.log(err));
+});
 
 
