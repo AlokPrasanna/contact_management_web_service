@@ -2,7 +2,7 @@
 const express = require("express");
 
 // -----------------------Custom libraries and modules-----------------------
-const { RegisterNewUser , LoginUser , GetAllUsers , GetUserById } = require("../controllers");
+const { RegisterNewUser , LoginUser , GetAllUsers , GetUserById  , UpdateUser} = require("../controllers");
 const {AuthenticateUser} = require("../middleware");
 
 // -----------Initialize the router-----------
@@ -20,5 +20,8 @@ router.get("/all" ,AuthenticateUser, GetAllUsers);
 
 // Get user by Id
 router.get("/one/:UserId" ,GetUserById);
+
+// Update user
+router.put("/update/:UserId" , UpdateUser);
 
 module.exports = router;

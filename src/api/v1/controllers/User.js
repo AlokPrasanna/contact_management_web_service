@@ -7,7 +7,6 @@ const { GenerateAccessTokens } = require("../libraries");
 
 // -----------------------Function to register a new user-----------------------
 const RegisterNewUser = async (req, res) => {
-  console.log(req.body);
   // Request body
   const {
     fullName,
@@ -187,4 +186,104 @@ const GetUserById = async(req ,res) =>{
   }
 }
 
-module.exports = { RegisterNewUser , LoginUser , GetAllUsers , GetUserById };
+// -------------------- Function to update user by user Id --------------------
+const UpdateUser = async(req , res) => {
+  // Get userId from the url
+  const {UserId} = req.params;
+  try {
+
+    // Request body
+  const {
+    fullName,
+    emailAddress,
+    password,
+    phoneNumber,
+    imageUrl,
+    gender,
+    userType,
+    dateCreated,
+    timeCreated,
+    dateUpdated,
+    timeUpdated,
+  } = req.body;
+
+    // Check user Id already exists
+     const User = await UserModel.findOne({_id: UserId}).exec();
+
+     if(!User){
+      return res.status(404).json({
+        status: false,
+        error:{
+          message: "No user found for the provided user id!"
+        }
+      });
+     }
+
+     // Update User filed if they are provided
+     if(fullName){
+      User.fullName = fullName;
+     }
+
+     if(emailAddress){
+      User.emailAddress = emailAddress;
+     }
+
+     if(password){
+      // Encrypt password
+      const EncryptedPassword = await bcrypt.hash(password , 8);
+      User.password = EncryptedPassword;
+     }
+
+     if(imageUrl){
+      User.imageUrl = imageUrl;
+     }
+
+     if(phoneNumber){
+      User.phoneNumber = phoneNumber;
+     }
+
+     if(gender){
+      User.gender = gender;
+     }
+
+     if(userType){
+      User.userType = userType;
+     }
+
+     if(dateUpdated){
+      User.dateUpdated = dateUpdated;
+     }
+
+     if(dateCreated){
+      User.dateCreated = dateCreated;
+     }
+
+     if(timeCreated){
+      User.timeCreated = timeCreated;
+     }
+
+     if(timeUpdated){
+      User.timeUpdated = timeUpdated;
+     }
+
+     const UpdateUser = await User.save();
+
+     return res.status(200).json({
+      status:true,
+      user:UpdateUser,
+      success:{
+        message: " User Update Successfully!"
+      }
+     })
+  } catch (error) {
+    console.log(error);
+    return res.status(500).json({
+      status:false,
+      error:{
+        message: "Failed to update user due to server error!"
+      }
+    })
+  }
+}
+
+module.exports = { RegisterNewUser , LoginUser , GetAllUsers , GetUserById , UpdateUser };
