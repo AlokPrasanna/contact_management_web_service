@@ -3,6 +3,7 @@ const bcrypt = require("bcrypt");
 
 // -----------------------Custom libraries and modules-----------------------
 const { UserModel } = require("../models");
+const { GenerateAccessTokens } = require("../libraries");
 
 // -----------------------Function to register a new user-----------------------
 const RegisterNewUser = async (req, res) => {
@@ -104,8 +105,12 @@ const LoginUser = async(req,res) => {
       });
     }   
 
+    // Generate  Token 
+    const { accessToken } = GenerateAccessTokens(User);
+
     return res.status(200).json({
       status: true,
+      accessToken,
       success:{
         message: "Logging success!"
       }
