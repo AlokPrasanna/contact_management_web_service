@@ -3,6 +3,7 @@ const express = require("express");
 
 // -----------------------Custom libraries and modules-----------------------
 const { RegisterNewUser , LoginUser , GetAllUsers , GetUserById } = require("../controllers");
+const {AuthenticateUser} = require("../middleware");
 
 // -----------Initialize the router-----------
 const router = express.Router();
@@ -15,7 +16,7 @@ router.post("/register", RegisterNewUser);
 router.post("/login" , LoginUser);
 
 // Get All Users
-router.get("/all" , GetAllUsers);
+router.get("/all" ,AuthenticateUser, GetAllUsers);
 
 // Get user by Id
 router.get("/one/:UserId" ,GetUserById);
