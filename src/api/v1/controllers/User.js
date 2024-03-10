@@ -76,4 +76,49 @@ const RegisterNewUser = async (req, res) => {
   }
 };
 
-module.exports = { RegisterNewUser };
+// -----------------------Function to login user-----------------------
+const LoginUser = async(req,res) => {
+  // Request body
+  const { emailAddress , password} = req.body;
+
+  try {
+    // Check email address already exists
+    const User = await UserModel.findOne({emailAddress}).exec();
+    if(!User){
+      return res.status(401).json({
+        status:false,
+        error:{
+          message:" Wrong email address!"
+        }
+      });
+    }
+
+    //  Check enterd passward matches
+    const MatchPassword = await bcrypt.compare(password , User.password); 
+    if(!MatchPassword){
+      return res.status(401).json({
+        status: false,
+        error:{
+          message: "Wrong Password!"
+        }
+      });
+    }   
+
+    return res.status(200).json({
+      status: true,
+      success:{
+        message: "Logging success!"
+      }
+    })
+  } catch (error) {
+    console.log(error);
+    return res.status(500).json({
+      status:false,
+      error:{
+        message: "Failed to Login due to server error!"
+      }
+    })
+  }
+}
+
+module.exports = { RegisterNewUser , LoginUser };

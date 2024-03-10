@@ -1,7 +1,8 @@
 // -----------------------Imports-----------------------
-const { RegisterNewUser } = require("./User");
+const { RegisterNewUser , LoginUser } = require("./User");
 
 // -----------------------Exports-----------------------
 module.exports = {
   RegisterNewUser,
+  LoginUser,
 };
