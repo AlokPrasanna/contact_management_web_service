@@ -121,4 +121,65 @@ const LoginUser = async(req,res) => {
   }
 }
 
-module.exports = { RegisterNewUser , LoginUser };
+// -----------------------Function to Get all user-----------------------
+const GetAllUsers = async(req,res) => {
+  try {
+    // Get all users from database
+    const AllUsers = await UserModel.find().exec();
+
+    return res.status(200).json({
+      status:true,
+      users:AllUsers,
+      success:{
+        message: " Success!"
+      }
+    })
+  } catch (error) {
+    console.log(error);
+    return res.status(500).json({
+      status:false,
+      users:null,
+      success:{
+        message: "Failed to get all users due to server error!"
+      }
+    })
+  }
+}
+
+// -----------------------Function to Get user by ID -----------------------
+const GetUserById = async(req ,res) =>{
+  // Get user Id from the url
+  const {UserId} = req.params;
+  try {
+    // Check user Id alredy exsits
+    const User = await UserModel.findOne({_id: UserId}).exec();
+    
+    if(!User){
+      return res.status(404).json({
+        status: false,
+        error:{
+          message: "No user found for the provided user id!"
+        }
+      });
+    }
+
+    return res.status(200).json({
+      status: true,
+      user: User,
+      success:{
+        message:"User Found Success!"
+      }
+    });
+
+  } catch (error) {
+    console.log(error);
+    return res.status(500).json({
+      status:false,
+      error:{
+        message: "Failed to find user due to server error!"
+      }
+    })
+  }
+}
+
+module.exports = { RegisterNewUser , LoginUser , GetAllUsers , GetUserById };

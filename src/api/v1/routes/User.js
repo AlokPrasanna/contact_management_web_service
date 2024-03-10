@@ -2,7 +2,7 @@
 const express = require("express");
 
 // -----------------------Custom libraries and modules-----------------------
-const { RegisterNewUser , LoginUser } = require("../controllers");
+const { RegisterNewUser , LoginUser , GetAllUsers , GetUserById } = require("../controllers");
 
 // -----------Initialize the router-----------
 const router = express.Router();
@@ -13,5 +13,11 @@ router.post("/register", RegisterNewUser);
 
 // Login User
 router.post("/login" , LoginUser);
+
+// Get All Users
+router.get("/all" , GetAllUsers);
+
+// Get user by Id
+router.get("/one/:UserId" ,GetUserById);
 
 module.exports = router;
