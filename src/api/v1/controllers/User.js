@@ -190,22 +190,19 @@ const GetUserById = async(req ,res) =>{
 const UpdateUser = async(req , res) => {
   // Get userId from the url
   const {UserId} = req.params;
-  try {
 
-    // Request body
+  // Request body
   const {
-    fullName,
-    emailAddress,
-    password,
-    phoneNumber,
-    imageUrl,
-    gender,
-    userType,
-    dateCreated,
-    timeCreated,
+    newPassword,
+    currentPassword,
     dateUpdated,
     timeUpdated,
   } = req.body;
+
+  // Global Variables
+  let UpdateUser , EncryptedPassword ;
+
+  try {
 
     // Check user Id already exists
      const User = await UserModel.findOne({_id: UserId}).exec();
@@ -219,62 +216,83 @@ const UpdateUser = async(req , res) => {
       });
      }
 
-     // Update User filed if they are provided
-     if(fullName){
-      User.fullName = fullName;
+     // propeties validation
+     if(!dateUpdated || !timeUpdated){
+      return res.status(400).json({
+        status: false,
+        error:{
+          message: "Not provided updated date or time information!"
+        }
+      });
      }
 
-     if(emailAddress){
-      User.emailAddress = emailAddress;
+     if(currentPassword && newPassword){
+      const PropetiesCount = Object.keys(req.body).length;
+      if(PropetiesCount != 4){
+        return res.status(400).json({
+          status: false,
+          error:{
+            message: "Invalid number of propeties for password update!"
+          }
+        });
+      }
+
+     // check current password maches or not
+
+     const PasswordMatch = await bcrypt.compare(currentPassword , User.password);
+
+     if(!PasswordMatch){
+      return res.status(400).json({
+          status: false,
+          error:{
+            message: "Worng current password!"
+          }
+      });
      }
 
-     if(password){
-      // Encrypt password
-      const EncryptedPassword = await bcrypt.hash(password , 8);
-      User.password = EncryptedPassword;
-     }
+     // Encrypt password
+     EncryptedPassword = await bcrypt.hash(newPassword , 8);
+    } else if( !currentPassword && newPassword){
+      return res.status(400).json({
+          status: false,
+          error:{
+            message: "Missing current password!"
+          }
+      });
+    }else if( !newPassword && currentPassword){
+      return res.status(400).json({
+          status: false,
+          error:{
+            message: "Missing new password!"
+          }
+      });
+    }
 
-     if(imageUrl){
-      User.imageUrl = imageUrl;
-     }
-
-     if(phoneNumber){
-      User.phoneNumber = phoneNumber;
-     }
-
-     if(gender){
-      User.gender = gender;
-     }
-
-     if(userType){
-      User.userType = userType;
-     }
-
-     if(dateUpdated){
-      User.dateUpdated = dateUpdated;
-     }
-
-     if(dateCreated){
-      User.dateCreated = dateCreated;
-     }
-
-     if(timeCreated){
-      User.timeCreated = timeCreated;
-     }
-
-     if(timeUpdated){
-      User.timeUpdated = timeUpdated;
-     }
-
-     const UpdateUser = await User.save();
+     // Update User 
+    UpdateUser = await UserModel.findOneAndUpdate(
+      {_id:UserId},
+      {
+        $set:
+          currentPassword && newPassword ? {
+            password: EncryptedPassword,
+            dateUpdated,
+            timeUpdated,
+          }
+          : req.body,
+      },
+      {
+        new:true
+      }
+    )
 
      return res.status(200).json({
       status:true,
       user:UpdateUser,
       success:{
-        message: " User Update Successfully!"
+        message: currentPassword && newPassword ? "Password Update Successfully!" : "User Details Update Successfully!"
       }
-     })
+     });
+     
   } catch (error) {
     console.log(error);
     return res.status(500).json({
