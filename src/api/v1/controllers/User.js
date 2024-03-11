@@ -282,8 +282,46 @@ const UpdateUser = async(req , res) => {
       error:{
         message: "Failed to update user due to server error!"
       }
-    })
+    });
   }
 }
 
-module.exports = { RegisterNewUser , LoginUser , GetAllUsers , GetUserById , UpdateUser };
+// -------------------- Function to delete user --------------------
+const DeleteUser = async(req , res) =>{
+  // Get userId from the url
+  const {UserId} = req.params;
+
+  try {
+     // Check user Id already exists
+     const User = await UserModel.findOne({_id: UserId}).exec();
+
+     if(!User){
+      return res.status(404).json({
+        status: false,
+        error:{
+          message: "No user found for the provided user id!"
+        }
+      });
+     }
+
+     const DeleteUser =  await User.deleteOne(); 
+     if(DeleteUser){
+      return res.status(200).json({
+        status: true,
+        success: {
+          message: "Delete user successfully!"
+        }
+      });
+     }
+  } catch (error) {
+    console.log(error);
+    return res.status(500).json({
+      status:false,
+      error:{
+        message: "Failed to delete user due to server error!"
+      }
+    });    
+  }
+}
+
+module.exports = { RegisterNewUser , LoginUser , GetAllUsers , GetUserById , UpdateUser , DeleteUser };

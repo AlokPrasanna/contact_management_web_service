@@ -1,5 +1,5 @@
 // -----------------------Imports-----------------------
-const { RegisterNewUser , LoginUser , GetAllUsers , GetUserById , UpdateUser } = require("./User");
+const { RegisterNewUser , LoginUser , GetAllUsers , GetUserById , UpdateUser , DeleteUser } = require("./User");
 
 // -----------------------Exports-----------------------
 module.exports = {
@@ -8,4 +8,5 @@ module.exports = {
   GetAllUsers,
   GetUserById,
   UpdateUser,
+  DeleteUser,
 };
