@@ -5,7 +5,7 @@ require("dotenv/config");
 // -------------------- Custom libraries and modules --------------------
 const Configs = require("./configuration");
 const { ConnectDatabase} = require("./api/v1/libraries") ;
-const { UserRoutes} = require("./api/v1/routes")
+const { UserRoutes , FileRoutes} = require("./api/v1/routes");
 
 // -------------------- Third-party components and modules --------------------
 const app = express();
@@ -17,6 +17,13 @@ const PORT = Configs.PORT || 3308;
 app.use(express.json());
 
 
+// ---------- Allow access uploads folder ----------
+app.use("/uploads" , express.static("./uploads/"));
+
+// ---------- Allow access downloads folder ----------
+app.use("/download" , express.static("./downloads/"));
+
+
 // -------------------- Base route --------------------
 
 app.get("/" , (req,res) => {
@@ -25,6 +32,9 @@ app.get("/" , (req,res) => {
 
 // -----------User route-----------
 app.use("/api/users", UserRoutes);
+
+// -----------File route-----------
+app.use("/api/files", FileRoutes);
 
 // -------------------- Error route --------------------
 app.use((req , res) => {

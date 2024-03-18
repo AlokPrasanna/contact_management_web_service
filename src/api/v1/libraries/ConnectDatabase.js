@@ -9,4 +9,4 @@ const ConnectDatabase = async() => {
  return await mongoose.connect(Config.MONGO_DB_URL);
 };
 
-module.exports = {ConnectDatabase};
+module.exports = { ConnectDatabase };

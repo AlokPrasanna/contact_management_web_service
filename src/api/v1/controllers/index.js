@@ -1,5 +1,13 @@
 // -----------------------Imports-----------------------
-const { RegisterNewUser , LoginUser , GetAllUsers , GetUserById , UpdateUser , DeleteUser } = require("./User");
+const { 
+   RegisterNewUser,
+   LoginUser,
+   GetAllUsers,
+   GetUserById,
+   UpdateUser,
+   DeleteUser } = require("./User");
+
+const {SaveFile} = require("./Files");   
 
 // -----------------------Exports-----------------------
 module.exports = {
@@ -9,4 +17,5 @@ module.exports = {
   GetUserById,
   UpdateUser,
   DeleteUser,
+  SaveFile,
 };
