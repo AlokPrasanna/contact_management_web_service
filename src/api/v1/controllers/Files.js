@@ -26,5 +26,32 @@ const SaveFile = async(req , res) => {
     });
 };
 
+// -------------------- Controller function to delete file to storage --------------------
+const DeleteFile = async( req , res) => {
+    const FilePath = path.join(
+        __dirname,
+        "../../../../uploads",
+        req.params.fileName
+    );
 
-module.exports = { SaveFile }
+    fs.unlink(FilePath, (err) => {
+        if(err){
+            return res.status(400).json({
+                status: false,
+                error: {
+                    message: "Failed to delete file!"
+                }
+            });
+        }
+
+        res.status(200).json({
+            status:true,
+            success:{
+                message: "Successfully delete the file!"
+            },
+            fileName: req.params.fileName
+        });
+    });
+};
+
+module.exports = { SaveFile , DeleteFile }

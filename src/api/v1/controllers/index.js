@@ -7,7 +7,7 @@ const {
    UpdateUser,
    DeleteUser } = require("./User");
 
-const {SaveFile} = require("./Files");   
+const {SaveFile , DeleteFile} = require("./Files");   
 
 // -----------------------Exports-----------------------
 module.exports = {
@@ -18,4 +18,5 @@ module.exports = {
   UpdateUser,
   DeleteUser,
   SaveFile,
+  DeleteFile,
 };
